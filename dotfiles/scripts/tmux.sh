@@ -4,7 +4,7 @@ pip_path=`which pip || which pip3`;
 if [ $? = 0 ]; then
   echo "\t Found 'pip' in $pip_path";
   echo "\t Installing tmuxp";
-  $pip_path install tmuxp > /dev/null;
+  $pip_path install --user tmuxp > /dev/null;
   if [ $? != 0 ]; then
     echo "\t Problem installing tmuxp";
   fi

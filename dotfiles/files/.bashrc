@@ -37,30 +37,39 @@ fi
 
 # set a fancy prompt (non-color, unless we know we "want" color)
 case "$TERM" in
-    xterm-color) color_prompt=yes;;
+    xterm-color|*-256color) color_prompt=yes;;
 esac
 
 # uncomment for a colored prompt, if the terminal has the capability; turned
 # off by default to not distract the user: the focus in a terminal window
 # should be on the output of commands, not on the prompt
-force_color_prompt=yes
+#force_color_prompt=yes
 
 if [ -n "$force_color_prompt" ]; then
     if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
-	# We have color support; assume it's compliant with Ecma-48
-	# (ISO/IEC-6429). (Lack of such support is extremely rare, and such
-	# a case would tend to support setf rather than setaf.)
-	color_prompt=yes
+  # We have color support; assume it's compliant with Ecma-48
+  # (ISO/IEC-6429). (Lack of such support is extremely rare, and such
+  # a case would tend to support setf rather than setaf.)
+  color_prompt=yes
     else
-	color_prompt=
+  color_prompt=
     fi
 fi
 
+parse_git_branch() {
+    git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/'
+}
 if [ "$color_prompt" = yes ]; then
-    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\] \[\033[01;36m\]\w\[\033[01;33m\] $(parse_git_branch)\[\033[00m\]\$ \n '
 else
-    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
+    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w$(parse_git_branch)\$ \n '
 fi
+
+#if [ "$color_prompt" = yes ]; then
+#    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+#else
+#    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
+#fi
 unset color_prompt force_color_prompt
 
 # If this is an xterm set the title to user@host:dir
@@ -84,10 +93,8 @@ if [ -x /usr/bin/dircolors ]; then
     alias egrep='egrep --color=auto'
 fi
 
-
 # colored GCC warnings and errors
 #export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
-
 
 # some more ls aliases
 alias ll='ls -alF'
@@ -98,7 +105,6 @@ alias l='ls -CF'
 #   sleep 10; alert
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
-
 # Alias definitions.
 # You may want to put all your additions into a separate file like
 # ~/.bash_aliases, instead of adding them here directly.
@@ -107,11 +113,6 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo
 if [ -f ~/.bash_aliases ]; then
     . ~/.bash_aliases
 fi
-
-if [ `which htmlhint-ng2` ]; then
-  alias htmlhint='htmlhint-ng2'
-fi
-
 
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
@@ -125,11 +126,18 @@ if ! shopt -oq posix; then
 fi
 
 
+############
+# WSL
+############
+export DISPLAY=:0
+LIBGL_ALWAYS_INDIRECT=1
+#export DOCKER_HOST=tcp://0.0.0.0:2375
+#export GIT_DISCOVERY_ACROSS_FILESYSTEM=1
+
 
 ############
 # Keymapping
 ############
-
 # Remap caps lock to ctrl
 if [ -x /usr/bin/setxkbmap ]; then
     setxkbmap -option ctrl:nocaps;
@@ -138,11 +146,9 @@ fi;
 #setxkbmap -option
 
 
-
 ######
 # Bash
 ######
-
 # The "**" pattern for paths will match directory depth of 0 or more.
 shopt -s globstar
 
@@ -154,18 +160,16 @@ function bcolor {
   grep --color "$1\|"
 }
 
+
 #####
 # SSH
 #####
-
 alias agentkey='eval `/usr/bin/ssh-agent -s`; ssh-add -t 1h;'
-
 
 
 #####
 # vim
 #####
-
 export EDITOR="/usr/bin/vim"
 # FZF plugin external binaries.
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
@@ -173,44 +177,42 @@ export EDITOR="/usr/bin/vim"
 export PATH="$HOME/.ctags:$PATH"
 
 
-
 ########
 # Python
 ########
-
 # Python virtualenv
-export WORKON_HOME=$HOME/.virtualenvs
-export PROJECT_HOME=$HOME/workspace
-export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python
-VENVWRAP="/usr/share/virtualenvwrapper/virtualenvwrapper.sh"
-if [ -f $VENVWRAP ]; then
-  source $VENVWRAP;
-fi
+# export WORKON_HOME=$HOME/.virtualenvs
+# export PROJECT_HOME=$HOME/workspace
+# export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python
+# VENVWRAP="/usr/share/virtualenvwrapper/virtualenvwrapper.sh"
+# if [ -f $VENVWRAP ]; then
+#   source $VENVWRAP;
+# fi
 
 # Add local python directories
-export PATH="$HOME/bin:$HOME/.local/bin:$PATH"
-
+# export PATH="$HOME/bin:$HOME/.local/bin:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
 
 
 ######
 # Ruby
 ######
-
-export GEM_HOME=$HOME/.gem
-export GEM_PATH=$GEM_HOME
-export PATH=$PATH:$GEM_PATH/bin
-
+# export GEM_HOME=$HOME/.gem
+# export GEM_PATH=$GEM_HOME
+# export PATH=$PATH:$GEM_PATH/bin
 
 
 ############
 # JavaScript
 ############
-
 # Set nvm root directory.
-export NVM_DIR="$HOME/.nvm"
+# export NVM_DIR="$HOME/.nvm"
 
 # This loads nvm
-[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+# [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+
+# Yarn
+export PATH="$HOME/.yarn/bin:$PATH"
 
 # Local npm modules can be found.
 export PATH="$PATH:./node_modules/.bin"
@@ -219,21 +221,16 @@ export PATH="$PATH:./node_modules/.bin"
 ############
 # Go
 ############
-
-export GOPATH=~/go
-export PATH="$PATH:$GOPATH/bin"
-if [ ! -d $GOPATH ]; then
-  mkdir -p $GOPATH/{bin,src};
-fi
+# export GOPATH=~/go
+# export PATH="$PATH:$GOPATH/bin"
+# if [ ! -d $GOPATH ]; then
+#   mkdir -p $GOPATH/{bin,src};
+# fi
 
 
 ########
 # Heroku
 ########
-
 # Added by the Heroku Toolbelt
-export PATH="/usr/local/heroku/bin:$PATH"
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
-
-
+# export PATH="/usr/local/heroku/bin:$PATH"
+# [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion

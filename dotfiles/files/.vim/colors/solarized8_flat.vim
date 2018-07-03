@@ -1,0 +1,1 @@
+/home/yongky/.vim/plugged/vim-solarized8/colors/solarized8_flat.vim

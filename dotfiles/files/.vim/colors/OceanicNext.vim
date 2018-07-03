@@ -1,0 +1,1 @@
+/home/yongky/.vim/plugged/oceanic-next/colors/OceanicNext.vim
