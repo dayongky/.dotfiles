@@ -1,0 +1,6 @@
+Screen background:	1,22,39
+Screen text:		214,222,235
+Popup background:	29,59,83
+Popup text:		199,146,234 (Magenta); 33,199,168 (Cyan);
+			34,218,110 (Green); 130,170,255 (Blue); 
+			173,219,103 (Yellow); 239,83,80 (Red)
