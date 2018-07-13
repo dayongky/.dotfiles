@@ -494,17 +494,25 @@ let g:pymode_debug = 0
 " Color scheme
 " ---------------------
 " colorscheme threshold  " Custom colorscheme file
+" colorscheme night-owl  " WIP
 
-" Oceanic Next
-Plug 'mhartington/oceanic-next'
+" Material Palenight
+Plug 'drewtempelmeyer/palenight.vim'
 " for vim 8
 if (has("termguicolors"))
   set termguicolors
 endif
 
+let g:palenight_terminal_italics=1
+set background=dark
+colorscheme palenight
+
+" Oceanic Next
+Plug 'mhartington/oceanic-next'
+
 let g:oceanic_next_terminal_bold = 1
 let g:oceanic_next_terminal_italic = 1
-colorscheme OceanicNext
+" colorscheme OceanicNext
 
 " Solarized 8
 Plug 'lifepillar/vim-solarized8'
