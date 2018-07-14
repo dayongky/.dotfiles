@@ -231,7 +231,7 @@ au Syntax * RainbowParenthesesLoadBraces
 " Code completion and generation
 " ------------------------------
 " TODO: look at vimcompleteme as an alternative
-" (enbale in gitbash)
+" (enable in gitbash)
 " Plug 'ajh17/VimCompletesMe'
 
 " YouCompleteMe code completion
