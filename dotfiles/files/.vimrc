@@ -183,9 +183,10 @@ function! SetProjectRoot()
 endfunction
 
 " follow symlink and set working directory
+" (disable in gitbash)
 autocmd BufRead *
   \ call FollowSymlink()
-  \ | call SetProjectRoot()               " disable in gitbash
+  \ | call SetProjectRoot()
 
 " F10: Show syntax highlighting group under cursor.
 " http://vim.wikia.com/wiki/VimTip99
@@ -230,6 +231,7 @@ au Syntax * RainbowParenthesesLoadBraces
 " Code completion and generation
 " ------------------------------
 " TODO: look at vimcompleteme as an alternative
+" (enbale in gitbash)
 " Plug 'ajh17/VimCompletesMe'
 
 " YouCompleteMe code completion
@@ -243,6 +245,7 @@ au Syntax * RainbowParenthesesLoadBraces
 Plug 'ervandew/supertab'
 let g:SuperTabDefaultCompletionType = '<C-n>'
 
+" (disable in gitbash)
 Plug 'Shougo/deoplete.nvim'
 Plug 'roxma/nvim-yarp'
 Plug 'roxma/vim-hug-neovim-rpc'
@@ -275,6 +278,7 @@ let g:user_emmet_settings = {
 " Requires `autoreconf` or `dh-autoreconf` system package to be installed for compilation.
 " https://askubuntu.com/questions/796408/installing-and-using-universal-ctags-instead-of-exuberant-ctags#836521
 " https://stackoverflow.com/questions/25819649/how-to-exclude-multiple-directories-with-exuberant-ctags#25819720
+" (disable in gitbash, download from https://github.com/universal-ctags/ctags-win32/releases)
 Plug 'universal-ctags/ctags', {
                         \'dir': '~/.ctags',
                         \'do': './autogen.sh; ./configure --prefix=$HOME; make',

@@ -24,5 +24,7 @@ tic dotfiles/files/.terminfo/xterm-256color.terminfo
 
 
 Gitbash only:
-in .vimrc, disable this line
-\ | call SetProjectRoot()
+disable Plug 'universal-ctags/ctags', download from https://github.com/universal-ctags/ctags-win32/releases
+disable autocmd BufRead * ... call FollowSymlink() | call SetProjectRoot()
+disable Plug 'Shougo/deoplete.nvim'
+enbale Plug 'ajh17/VimCompletesMe'
