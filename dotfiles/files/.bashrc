@@ -160,6 +160,10 @@ function bcolor {
   grep --color "$1\|"
 }
 
+######
+# Tmux
+######
+export TERM=xterm-256color
 
 #####
 # SSH

@@ -29,8 +29,8 @@ vnoremap <F1> <ESC>
 " Enable 256 colors. Good for statusbar.
 set t_Co=256
 
-" Enable sytax highlighting
-syntax on
+" Enable sytax highlighting (plug not need)
+" syntax on
 
 " Show status even without a split
 set laststatus=2
@@ -112,8 +112,16 @@ nnoremap <space> za
 set fileformat=unix
 
 " Undo enabled, even after closing (.un~)
-set undofile
+" set undofile
 
+" no backup files
+set nobackup
+" only in case you don't want a backup file while editing
+set nowritebackup
+" no swap files
+set noswapfile
+" use system clipboard
+set clipboard=unnamed
 
 " ======================================
 "           Functions
@@ -177,7 +185,7 @@ endfunction
 " follow symlink and set working directory
 autocmd BufRead *
   \ call FollowSymlink()
-  \ | call SetProjectRoot()
+  \ | call SetProjectRoot()               " disable in gitbash
 
 " F10: Show syntax highlighting group under cursor.
 " http://vim.wikia.com/wiki/VimTip99
@@ -195,7 +203,7 @@ if empty(glob("~/.vim/autoload/plug.vim"))
     execute '!curl --create-dirs -fLo ~/.vim/autoload/plug.vim https://raw.github.com/junegunn/vim-plug/master/plug.vim'
 endif
 
-filetype off                  " Disable filetype recognition
+" filetype off                  " Disable filetype recognition (plug not need)
 call plug#begin()
 
 " ------------------------------
@@ -210,23 +218,35 @@ Plug 'tpope/vim-commentary'  " gc to comment/uncomment lines
 autocmd FileType cfg setlocal commentstring=#\ %s
 autocmd FileType sls setlocal commentstring=#\ %s
 
+" Rainbow Parentheses
+Plug 'kien/rainbow_parentheses.vim'
+au VimEnter * RainbowParenthesesToggle
+au Syntax * RainbowParenthesesLoadRound
+au Syntax * RainbowParenthesesLoadSquare
+au Syntax * RainbowParenthesesLoadBraces
+
 
 " ------------------------------
 " Code completion and generation
 " ------------------------------
 " TODO: look at vimcompleteme as an alternative
-Plug 'ajh17/VimCompletesMe'
+" Plug 'ajh17/VimCompletesMe'
 
 " YouCompleteMe code completion
-"Plug 'Valloric/YouCompleteMe'  " LARGE download (~200MB)
+" Plug 'Valloric/YouCompleteMe'  " LARGE download (~200MB)
 " let g:ycm_autoclose_preview_window_after_completion=1
-
-" supertab lets YCM and snippets not trip over each other.
 " make YCM compatible with UltiSnips (using supertab)
-" Plug 'ervandew/supertab'
 " let g:ycm_key_list_select_completion = ['<C-n>', '<Down>']
 " let g:ycm_key_list_previous_completion = ['<C-p>', '<Up>']
-" let g:SuperTabDefaultCompletionType = '<C-n>'
+
+" supertab lets code completion and snippets not trip over each other.
+Plug 'ervandew/supertab'
+let g:SuperTabDefaultCompletionType = '<C-n>'
+
+Plug 'Shougo/deoplete.nvim'
+Plug 'roxma/nvim-yarp'
+Plug 'roxma/vim-hug-neovim-rpc'
+let g:deoplete#enable_at_startup = 1
 
 " Snippet engine and library
 Plug 'SirVer/ultisnips'
@@ -240,7 +260,7 @@ let g:UltiSnipsSnippetDirectories=["UltiSnips", "vimsnips"]
 
 " Emmet
 Plug 'mattn/emmet-vim'
-let g:user_emmet_leader_key='<Tab>'
+let g:user_emmet_leader_key="<C-e>"
 let g:user_emmet_settings = {
   \  'javascript.jsx' : {
     \      'extends' : 'jsx',
@@ -439,7 +459,7 @@ autocmd BufWritePost *.js AsyncRun -post=checktime ./node_modules/.bin/eslint --
 " --------------
 " Python support
 " --------------
-Plug 'jmcantrell/vim-virtualenv' " Python virtualenv support
+" Plug 'jmcantrell/vim-virtualenv' " Python virtualenv support
 Plug 'tmhedberg/SimpylFold'  " Python specific code folding
 let g:SimpylFold_docstring_preview = 0  " Don't fold docstrings and imports
 let g:SimpylFold_fold_import = 0
@@ -448,17 +468,18 @@ let g:SimpylFold_fold_import = 0
 " ---------------------
 " Status bar
 " ---------------------
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
-Plug 'edkolev/tmuxline.vim'
+" disable, it make vim slow
+" Plug 'vim-airline/vim-airline'
+" Plug 'vim-airline/vim-airline-themes'
+" Plug 'edkolev/tmuxline.vim'
 " Default theme
-let g:airline_theme = 'term'
-" Enable enhanced fonts with unicode
-let g:airline_powerline_fonts = 1
-" Enable tagbar integration
-let g:airline#extensions#tagbar#enabled = 1
-" Enable virtualenv integration
-let g:airline#extensions#virtualenv#enabled = 1
+" let g:airline_theme = 'term'
+" " Enable enhanced fonts with unicode
+" let g:airline_powerline_fonts = 1
+" " Enable tagbar integration
+" let g:airline#extensions#tagbar#enabled = 1
+" " Enable virtualenv integration
+" let g:airline#extensions#virtualenv#enabled = 1
 
 
 " --------------------------------------
@@ -493,15 +514,23 @@ let g:pymode_debug = 0
 " ---------------------
 " Color scheme
 " ---------------------
+" Enable true colors
+if (has("termguicolors"))
+  set termguicolors
+endif
+
+" Enable true color in tmux with dirty hack
+" if (has("termguicolors"))
+"   let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+"   let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+"   set termguicolors
+" endif
+
 " colorscheme threshold  " Custom colorscheme file
 " colorscheme night-owl  " WIP
 
 " Material Palenight
 Plug 'drewtempelmeyer/palenight.vim'
-" for vim 8
-if (has("termguicolors"))
-  set termguicolors
-endif
 
 let g:palenight_terminal_italics=1
 set background=dark
@@ -510,15 +539,15 @@ colorscheme palenight
 " Oceanic Next
 Plug 'mhartington/oceanic-next'
 
-let g:oceanic_next_terminal_bold = 1
-let g:oceanic_next_terminal_italic = 1
+" let g:oceanic_next_terminal_bold = 1
+" let g:oceanic_next_terminal_italic = 1
 " colorscheme OceanicNext
 
 " Solarized 8
-Plug 'lifepillar/vim-solarized8'
+" Plug 'lifepillar/vim-solarized8'
 " set background=dark
 " colorscheme solarized8_flat
 
 
 call plug#end()
-filetype plugin indent on     " Enable filetype recognition
+" filetype plugin indent on     " Enable filetype recognition (plug not need)

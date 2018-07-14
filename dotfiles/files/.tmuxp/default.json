@@ -1,10 +1,7 @@
 {
   "windows": [
     {
-      "panes": [
-        "pane",
-        "pane"
-      ],
+      "panes": ["pane", "pane"],
       "start_directory": "~/",
       "layout": "10cc,169x46,0,0{84x46,0,0,0,84x46,85,0,1}",
       "focus": "true",
@@ -38,7 +35,7 @@
       "options": {
         "automatic-rename": "off"
       },
-      "window_name": "system"
+      "window_name": "home"
     }
   ],
   "session_name": "0"
